@@ -1713,5 +1713,70 @@ window.addEventListener("dragend",hide);document.addEventListener("keydown",func
 var a=document.getElementById("bImp"),b=document.getElementById("bCapIn");
 if(a)a.title="คลิกเลือกไฟล์ หรือลากไฟล์มาวางที่หน้านี้ได้เลย";if(b)b.title="คลิกเลือกไฟล์ หรือลากไฟล์มาวางที่หน้านี้ได้เลย"})();
 </script>
+<style>
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+main>section:not(.hide){animation:fi .22s ease}
+@media(prefers-reduced-motion:reduce){main>section:not(.hide){animation:none}}
+.tab::before{content:attr(data-ic) "  ";font-size:1.05em}
+body.dense td,body.dense th{padding-top:3px!important;padding-bottom:3px!important}
+@media(min-width:960px){body.sbmin{grid-template-columns:68px minmax(0,1fr)}
+body.sbmin .hd{padding:14px 8px;align-items:center}
+body.sbmin .hd>div:first-child>*:not(#sbT),body.sbmin #fontSel,body.sbmin #pnB{display:none!important}
+body.sbmin .tab{font-size:0;text-align:center;padding:10px 0}
+body.sbmin .tab::before{font-size:19px}}
+#sbT{order:0;align-self:flex-end;width:auto!important;padding:2px 9px;margin-bottom:4px}
+@media(max-width:959px){#sbT{display:none}}
+#pnB{order:5;margin-top:4px;width:100%}
+#pn{position:fixed;z-index:9000;left:252px;bottom:16px;width:290px;display:none;padding:14px;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:14px;box-shadow:0 12px 32px rgba(10,20,40,.22)}
+#pn.on{display:block}@media(max-width:959px){#pn{left:12px}}
+#pn h4{font-weight:600;margin:0 0 8px}#pn .r{margin-top:12px}#pn .r>span{display:block;font-size:.85em;color:var(--mu);margin-bottom:5px}
+#pn .sw{display:flex;gap:8px;flex-wrap:wrap}
+#pn .sw button{width:28px;height:28px;border-radius:50%;border:2px solid var(--sf);box-shadow:0 0 0 1px var(--bd);cursor:pointer}
+#pn .sw button.on{box-shadow:0 0 0 2px var(--tx)}
+#pn label{display:flex;gap:8px;align-items:center;cursor:pointer}#pn #fontSel{width:100%;margin:0;display:block}
+#cp{position:fixed;inset:0;z-index:9998;display:none;align-items:flex-start;justify-content:center;padding-top:14vh;background:rgba(15,25,45,.45);backdrop-filter:blur(2px)}
+#cp.on{display:flex}
+#cp .b{width:min(560px,92vw);background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:14px;box-shadow:0 20px 50px rgba(10,20,40,.3);overflow:hidden}
+#cp input{width:100%;padding:14px 16px;font-size:1.05em;border:0;border-bottom:1px solid var(--bd);background:transparent;color:var(--tx);outline:0}
+#cp ul{list-style:none;margin:0;padding:6px;max-height:320px;overflow:auto}
+#cp li{padding:9px 12px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+#cp li small{color:var(--mu)}#cp li.on{background:var(--ac2);color:var(--ac)}
+#cp .f{padding:7px 14px;border-top:1px solid var(--bd);color:var(--mu);font-size:.8em}
+</style>
+<div id="pn"><h4>🎨 ปรับแต่งหน้าตา</h4>
+<div class="r"><span>สีหลัก</span><div class="sw" id="pnSw"></div></div>
+<div class="r"><label><input type="checkbox" id="pnD"> ตารางแบบกะทัดรัด (เห็นแถวได้มากขึ้น)</label></div>
+<div class="r"><span>ฟอนต์</span><div id="pnF"></div></div></div>
+<div id="cp"><div class="b"><input id="cpI" placeholder="พิมพ์คำสั่ง… เช่น master, นำเข้า, ธีม" autocomplete="off"><ul id="cpL"></ul><div class="f">↑↓ เลือก · Enter ตกลง · Esc ปิด · เปิดด้วย Ctrl + K</div></div></div>
+<script>
+(function(){var $=function(q){return document.querySelector(q)},B=document.body,L=function(k){try{return localStorage.getItem(k)}catch(e){return null}},S=function(k,v){try{localStorage.setItem(k,v)}catch(e){}};
+var tabs=[].slice.call(document.querySelectorAll(".tab")),IC=["📦","🧩","🔗","🛠","🧮","🕘","📊"];tabs.forEach(function(t,i){t.dataset.ic=IC[i]||"•"});
+/* สีหลัก */
+var A=[["น้ำเงิน","#2556d9","#6e9bff"],["เทอร์ควอยซ์","#0b7f8c","#4fd1dc"],["ม่วง","#6b45d1","#a98bff"],["เขียว","#1b7f4b","#5fd68a"],["ส้ม","#c2570c","#ffa05a"],["กราไฟต์","#3b4658","#aab6c8"]];
+var st=document.createElement("style");document.head.appendChild(st);
+function acc(i){var a=A[i]||A[0],l="--ac:"+a[1]+";--ac2:color-mix(in srgb,"+a[1]+" 11%,#fff);--onac:#fff",d="--ac:"+a[2]+";--ac2:color-mix(in srgb,"+a[2]+" 20%,#171c24);--onac:#0a1224";
+st.textContent=":root{"+l+"}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){"+d+"}}:root[data-theme=dark]{"+d+"}";S("wmsAcc",i);[].forEach.call(document.querySelectorAll("#pnSw button"),function(b,j){b.classList.toggle("on",j==i)})}
+var sw=$("#pnSw");A.forEach(function(a,i){var b=document.createElement("button");b.title=a[0];b.style.background=a[1];b.onclick=function(){acc(i)};sw.appendChild(b)});acc(+L("wmsAcc")||0);
+/* กะทัดรัด / ย่อเมนู */
+var dn=$("#pnD");function dens(v){B.classList.toggle("dense",v);dn.checked=v;S("wmsDens",v?1:0)}dn.onchange=function(){dens(dn.checked)};dens(L("wmsDens")==="1");
+function sbm(v){B.classList.toggle("sbmin",v);S("wmsSb",v?1:0);t.textContent=v?"»":"«";$("#pn").style.left=v?"80px":""}
+var h=$(".hd"),t=document.createElement("button");t.id="sbT";t.className="btn";t.title="ย่อ/ขยายเมนูข้าง";t.onclick=function(){sbm(!B.classList.contains("sbmin"))};h.insertBefore(t,h.firstChild);sbm(L("wmsSb")==="1");
+/* ปุ่มปรับแต่ง + ย้ายตัวเลือกฟอนต์เข้าแผง */
+var pb=document.createElement("button");pb.id="pnB";pb.className="btn";pb.textContent="🎨 ปรับแต่ง · Ctrl+K";h.appendChild(pb);
+var fs=$("#fontSel");if(fs)$("#pnF").appendChild(fs);var pn=$("#pn");
+pb.onclick=function(e){e.stopPropagation();pn.classList.toggle("on")};document.addEventListener("click",function(e){if(!pn.contains(e.target))pn.classList.remove("on")});
+/* ค้นหาคำสั่งด่วน */
+var cp=$("#cp"),ci=$("#cpI"),cl=$("#cpL"),items=[],sel=0;
+function build(){items=[];tabs.forEach(function(x){items.push({n:(x.dataset.ic||"")+" ไปแท็บ "+x.textContent.trim(),k:"tab",f:function(){x.click()}})});
+[["bImp","📥 นำเข้าสต็อก Excel / CSV"],["bCapIn","📥 นำเข้า Master Cap"],["bExp","📤 Export ที่กรองแล้ว"],["bCapOut","📤 Export Master Cap"],["bTheme","🌓 สลับธีม สว่าง/มืด"],["bManual","📖 คู่มือ"]].forEach(function(a){var e=document.getElementById(a[0]);if(e)items.push({n:a[1],k:"action",f:function(){e.click()}})});
+items.push({n:"🎨 เปิดแผงปรับแต่ง (สี · ฟอนต์)",k:"setting",f:function(){pn.classList.add("on")}},{n:"↔ ย่อ/ขยายเมนูข้าง",k:"setting",f:function(){sbm(!B.classList.contains("sbmin"))}},{n:"☰ สลับตารางกะทัดรัด",k:"setting",f:function(){dens(!B.classList.contains("dense"))}});
+A.forEach(function(a,i){items.push({n:"● สีหลัก: "+a[0],k:"setting",f:function(){acc(i)}})})}
+function draw(){var q=ci.value.trim().toLowerCase(),v=items.filter(function(x){return!q||x.n.toLowerCase().indexOf(q)>=0});sel=Math.min(sel,Math.max(0,v.length-1));cp._v=v;
+cl.innerHTML="";v.forEach(function(x,i){var li=document.createElement("li");li.className=i==sel?"on":"";li.innerHTML="<span></span><small>"+x.k+"</small>";li.firstChild.textContent=x.n;li.onmousedown=function(e){e.preventDefault();run(x)};cl.appendChild(li)});if(!v.length)cl.innerHTML="<li><span>ไม่พบคำสั่ง</span></li>"}
+function run(x){close();x.f()}function open(){build();sel=0;ci.value="";cp.classList.add("on");draw();ci.focus()}function close(){cp.classList.remove("on")}
+ci.oninput=function(){sel=0;draw()};cp.onmousedown=function(e){if(e.target===cp)close()};
+ci.onkeydown=function(e){var v=cp._v||[];if(e.key==="ArrowDown"){e.preventDefault();sel=(sel+1)%Math.max(1,v.length);draw()}else if(e.key==="ArrowUp"){e.preventDefault();sel=(sel-1+v.length)%Math.max(1,v.length);draw()}else if(e.key==="Enter"&&v[sel]){e.preventDefault();run(v[sel])}else if(e.key==="Escape"){close()}};
+document.addEventListener("keydown",function(e){if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();e.stopPropagation();cp.classList.contains("on")?close():open()}else if(e.key==="Escape")pn.classList.remove("on")},true)})();
+</script>
 </body>
 </html>
