@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="utf-8">
-<meta name="app-version" content="2.5">
+<meta name="app-version" content="27">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>WMS Cold Storage · Master Cap</title>
 <link rel="icon" id="fav" href="Logo%20sungroup.jpg">
@@ -1678,6 +1678,40 @@ ap(cur);var s=document.createElement("select");s.id="fontSel";s.title="เลื
 F.forEach(function(f,i){var o=document.createElement("option");o.value=i;o.textContent="ฟอนต์: "+f[0];s.appendChild(o)});
 s.value=cur;s.onchange=function(){ap(+s.value)};
 var h=document.querySelector(".hd>div:first-child");if(h)h.appendChild(s);})();
+</script>
+<style>
+#dz{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;gap:20px;padding:24px;background:rgba(15,25,45,.55);backdrop-filter:blur(3px)}
+#dz.on{display:flex}
+#dz .z{flex:1;max-width:420px;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:24px;background:var(--sf);color:var(--tx);border:2px dashed var(--bd);border-radius:16px;transition:.12s}
+#dz .z b{font-size:1.25em}#dz .z span{color:var(--mu);font-size:.9em}
+#dz .z.rec{border-color:var(--ac)}
+#dz .z.hot{border:2px solid var(--ac);background:var(--ac2);transform:scale(1.03)}
+#dz .z i{font-style:normal;font-size:2.4em;line-height:1}
+@media(max-width:700px){#dz{flex-direction:column}#dz .z{min-height:140px;max-width:none;width:100%}}
+</style>
+<div id="dz" aria-hidden="true">
+<div class="z" data-in="fIn"><i>📦</i><b>นำเข้าสต็อก</b><span>ปล่อยไฟล์ Excel / CSV ที่นี่</span></div>
+<div class="z" data-in="fCap"><i>🧮</i><b>นำเข้า Master Cap</b><span>ปล่อยไฟล์ Master Cap / Master Cap update ที่นี่</span></div>
+</div>
+<script>
+(function(){var dz=document.getElementById("dz"),n=0;
+function hasF(e){var t=e.dataTransfer&&e.dataTransfer.types;return t&&Array.prototype.indexOf.call(t,"Files")>=0}
+function say(m){try{toast(m)}catch(x){alert(m)}}
+function show(){var on=document.querySelector(".tab.on"),cap=on&&on.dataset.t==="cap";
+dz.querySelectorAll(".z").forEach(function(z){z.classList.remove("hot");z.classList.toggle("rec",cap?z.dataset.in==="fCap":z.dataset.in==="fIn")});dz.classList.add("on")}
+function hide(){n=0;dz.classList.remove("on")}
+window.addEventListener("dragenter",function(e){if(!hasF(e))return;e.preventDefault();if(n++===0)show()});
+window.addEventListener("dragleave",function(e){if(!hasF(e))return;if(--n<=0)hide()});
+window.addEventListener("dragover",function(e){if(!hasF(e))return;e.preventDefault();e.dataTransfer.dropEffect="copy";
+dz.querySelectorAll(".z").forEach(function(z){z.classList.toggle("hot",z.contains(e.target))})});
+window.addEventListener("drop",function(e){if(!hasF(e))return;e.preventDefault();var z=e.target.closest&&e.target.closest("#dz .z");hide();if(!z)return;
+var fs=e.dataTransfer.files;if(!fs.length)return;var f=fs[0];
+if(!/\.(xlsx|xls|csv)$/i.test(f.name))return say("รองรับเฉพาะไฟล์ .xlsx .xls .csv");
+var inp=document.getElementById(z.dataset.in),dt=new DataTransfer();dt.items.add(f);inp.files=dt.files;inp.dispatchEvent(new Event("change",{bubbles:true}));
+if(fs.length>1)say("นำเข้าไฟล์แรกเท่านั้น: "+f.name)});
+window.addEventListener("dragend",hide);document.addEventListener("keydown",function(e){if(e.key==="Escape")hide()});
+var a=document.getElementById("bImp"),b=document.getElementById("bCapIn");
+if(a)a.title="คลิกเลือกไฟล์ หรือลากไฟล์มาวางที่หน้านี้ได้เลย";if(b)b.title="คลิกเลือกไฟล์ หรือลากไฟล์มาวางที่หน้านี้ได้เลย"})();
 </script>
 </body>
 </html>
